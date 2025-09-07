@@ -35,6 +35,7 @@ namespace memory_sandbox {
         : size_(size), use_guard_pages_(use_guard_pages)
         {
             std::size_t page_size = sysconf(_SC_PAGESIZE);
+            if (page_size == 0) throw std::runtime_error("sysconf failed to get page size");
 
             // round up to nearest page
             std::size_t total_alloc_size = ((size_ + page_size - 1) / page_size) * page_size;

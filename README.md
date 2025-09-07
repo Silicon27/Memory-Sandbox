@@ -2,7 +2,7 @@
 
 Memory Sandbox is an in-process memory sandboxing environment manager that allows segmentation of virtual memory in a processes and provides custom tools to manipulate the sandboxed memory.
 
-> [!WARNING] \
+> [!WARNING]\
 > Memory Sandbox does **NOT** containerize, virtualize, or fully isolate code.
 > Code running within the sandbox:
 > - shares the same process as the host program
