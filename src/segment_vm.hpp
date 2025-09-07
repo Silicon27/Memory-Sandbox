@@ -17,6 +17,7 @@
 #include <sys/mman.h>
 #include <stdexcept>
 #include <unistd.h>
+#include <map>
 
 // Segment Virtual Memory Manager is used by Memory Sandbox to
 // segment virtual memory space in some program such
@@ -24,6 +25,14 @@
 // avoid interference with the program's other memory usage.
 
 namespace memory_sandbox {
+
+    template <typename T>
+    struct AllocatedObj {
+        void* ptr; // start address of allocated object
+        std::size_t size; // size of allocated object in bytes
+        std::size_t count; // number of objects allocated
+        using Type = T; // type of the allocated object
+    };
 
     class Segment_virtual_memory_manager {
     public:
@@ -82,12 +91,37 @@ namespace memory_sandbox {
     protected:
         void* memory() { return user_memory_; }
         std::size_t size() { return size_; }
+
+        template <typename T>
+        AllocatedObj<T> allocate(std::size_t n = 1) {
+            std::size_t total_size = n * sizeof(T);
+            if (total_size > size_ - used_) throw std::bad_alloc();
+            void* ptr = static_cast<char *>(user_memory_) + used_;
+            used_ += total_size;
+            AllocatedObj<T> obj{ptr, sizeof(T), n};
+            allocations_.push_back(obj);
+            return obj;
+        }
+
+        template <typename T, typename... Args>
+        T* construct(std::size_t n = 1, Args&&... args) {
+            AllocatedObj<T> obj = allocate<T>(n);
+            T* ptr = static_cast<T*>(obj.ptr);
+            for (std::size_t i = 0; i < n; ++i) {
+                new(&ptr[i]) T(std::forward<Args>(args)...);
+            }
+            return ptr;
+        }
     private:
         void* memory_ = nullptr;            // start of allocated memory segment (includes guard pages)
         void* user_memory_ = nullptr;       // memory pointer for user to use
-        std::size_t size_ = 0;              // requested size
-        std::size_t alloc_size_ = 0;        // total allocated size including guard pages
+        std::size_t size_ = 0;              // requested size in bytes (excluding guard pages)
+        std::size_t alloc_size_ = 0;        // total allocated size including guard pages in bytes
         bool use_guard_pages_ = true;
+
+        // track allocations within user_memory_
+        template <typename T> std::vector<AllocatedObj<T>> allocations_;
+        std::size_t used_ = 0;               // bytes used within user_memory_
     };
 }
 
