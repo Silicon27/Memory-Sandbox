@@ -1,0 +1,3 @@
+[submodule "src/cprocess/Gao"]
+	path = src/cprocess/Gao
+	url = https://github.com/Silicon27/Gao.git

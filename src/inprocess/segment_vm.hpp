@@ -92,6 +92,11 @@ namespace memory_sandbox {
         void* memory() { return user_memory_; }
         std::size_t size() { return size_; }
 
+        // returns an AllocatedObj representing the reserved memory block
+        // with a void* to the start of the block, size of each object,
+        // and number of objects allocated.
+        // Or in other words, it does not construct the objects, just reserves
+        // the memory for them.
         template <typename T>
         AllocatedObj<T> allocate(std::size_t n = 1) {
             std::size_t total_size = n * sizeof(T);
@@ -103,6 +108,7 @@ namespace memory_sandbox {
             return obj;
         }
 
+        // constructs n objects of type T in the reserved memory
         template <typename T, typename... Args>
         T* construct(std::size_t n = 1, Args&&... args) {
             AllocatedObj<T> obj = allocate<T>(n);

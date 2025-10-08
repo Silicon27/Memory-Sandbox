@@ -6,7 +6,7 @@
 #define SANDBOX_HPP
 #include <memory>
 
-#include "segment_vm.hpp"
+#include "../segment_vm.hpp"
 
 namespace memory_sandbox {
 
@@ -23,7 +23,9 @@ namespace memory_sandbox {
                                                               size, use_guard_pages)) {
         }
 
+        void* malloc(std::size_t size) {
 
+        }
 
     };
 
