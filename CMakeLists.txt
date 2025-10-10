@@ -4,3 +4,6 @@ project(memory_sandbox)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(memory_sandbox main.cpp)
+
+add_subdirectory(src/cprocess/Gao)
+add_subdirectory(src/cprocess/Gao/src/si)

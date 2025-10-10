@@ -17,7 +17,7 @@
 namespace memory_sandbox::cprocess {
 
     class Sandbox {
-        Gao::Launch process_;
+        Gao::Orchestrator process_;
         Gao::Gaolette mspace_;
     public:
         Sandbox() {
