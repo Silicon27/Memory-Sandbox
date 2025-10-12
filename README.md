@@ -16,6 +16,6 @@ Memory Sandbox In-Process is an in-process memory sandboxing runtime environment
 
 
 ### MSCP
-Memory Sandbox CProcess is a runtime environment manager for sandboxing within a child-process.
+Memory Sandbox CProcess is a runtime environment wrapper API around _[Gao](https://github.com/Silicon27/Gao)_. To read more about the internal workings of the runtime, check out _[Gao](https://github.com/Silicon27/Gao)_.
 
-
+<!-- Example usage of MSCP to create an environment that runs some assembly code -->
